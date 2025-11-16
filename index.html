@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Атлас Восприятия: Кураторство</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 40px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .progress {
+            background: #e0e0e0;
+            height: 6px;
+            border-radius: 3px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            background: #4CAF50;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+            font-size: 14px;
+            color: #666;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-value {
+            font-weight: 600;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        .image-viewer {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        .image-container {
+            flex: 1;
+            position: relative;
+            background: #f9f9f9;
+            border-radius: 8px;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            max-height: 600px;
+            object-fit: contain;
+        }
+        
+        .info-panel {
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        
+        .image-path {
+            font-size: 13px;
+            color: #666;
+            word-break: break-all;
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 6px;
+            line-height: 1.6;
+        }
+        
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        button {
+            padding: 18px;
+            font-size: 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-approve {
+            background: #4CAF50;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .btn-approve:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+        
+        .btn-reject {
+            background: #f44336;
+            color: white;
+        }
+        
+        .btn-reject:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+        
+        .btn-skip {
+            background: #e0e0e0;
+            color: #666;
+        }
+        
+        .btn-skip:hover {
+            background: #d0d0d0;
+        }
+        
+        .btn-undo {
+            background: #FF9800;
+            color: white;
+            font-size: 14px;
+        }
+        
+        .btn-undo:hover {
+            background: #F57C00;
+        }
+        
+        .btn-undo:disabled {
+            background: #e0e0e0;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+        
+        .completed {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        .completed h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+            font-size: 32px;
+        }
+        
+        .completed p {
+            color: #666;
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+        
+        .btn-download {
+            background: #2196F3;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        .btn-download:hover {
+            background: #1976D2;
+        }
+        
+        .shortcuts {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #666;
+        }
+        
+        .shortcuts strong {
+            color: #333;
+        }
+        
+        kbd {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 2px 6px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Атлас Восприятия: Кураторство</h1>
+        <p class="subtitle">Отберите изображения для финального "Атласа"</p>
+        
+        <div class="progress">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <span>Просмотрено:</span>
+                <span class="stat-value" id="reviewed">0</span>
+                <span>/ <span id="total">0</span></span>
+            </div>
+            <div class="stat">
+                <span>Одобрено:</span>
+                <span class="stat-value" id="approved">0</span>
+            </div>
+            <div class="stat">
+                <span>Отклонено:</span>
+                <span class="stat-value" id="rejected">0</span>
+            </div>
+        </div>
+        
+        <div id="content">
+            <div class="loading">
+                <p>Загрузка изображений...</p>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        let images = [];
+        let currentIndex = 0;
+        let approved = [];
+        let rejected = [];
+        let history = [];
+        
+        async function loadImages() {
+            try {
+                const response = await fetch('candidates.json');
+                const data = await response.json();
+                images = data.images;
+                document.getElementById('total').textContent = images.length;
+                showImage();
+            } catch (error) {
+                document.getElementById('content').innerHTML = `
+                    <div class="error">
+                        <strong>Ошибка загрузки:</strong> ${error.message}
+                        <p style="margin-top: 10px; font-size: 13px;">
+                            Убедитесь, что файл candidates.json доступен.
+                        </p>
+                    </div>
+                `;
+            }
+        }
+        
+        function showImage() {
+            if (currentIndex >= images.length) {
+                showCompleted();
+                return;
+            }
+            
+            const imageData = images[currentIndex];
+            
+            document.getElementById('content').innerHTML = `
+                <div class="image-viewer">
+                    <div class="image-container">
+                        <img src="${imageData.url}" alt="Image ${currentIndex + 1}" 
+                             onerror="this.parentElement.innerHTML='<p style=\\'color:#999\\'>Не удалось загрузить изображение</p>'">
+                    </div>
+                    <div class="info-panel">
+                        <div class="image-path">
+                            <strong>Путь:</strong><br>
+                            ${imageData.path}
+                        </div>
+                        <div class="buttons">
+                            <button class="btn-approve" onclick="approveImage()">
+                                ✓ Одобрить
+                                <span style="font-size: 13px; opacity: 0.8;">(→)</span>
+                            </button>
+                            <button class="btn-reject" onclick="rejectImage()">
+                                ✕ Отклонить
+                                <span style="font-size: 13px; opacity: 0.8;">(←)</span>
+                            </button>
+                            <button class="btn-skip" onclick="skipImage()">
+                                Пропустить
+                                <span style="font-size: 13px; opacity: 0.8;">(Пробел)</span>
+                            </button>
+                            <button class="btn-undo" onclick="undoLast()" ${history.length === 0 ? 'disabled' : ''}>
+                                ↶ Отменить
+                                <span style="font-size: 13px; opacity: 0.8;">(Backspace)</span>
+                            </button>
+                        </div>
+                        <div class="shortcuts">
+                            <strong>Горячие клавиши:</strong><br>
+                            <kbd>←</kbd> Отклонить<br>
+                            <kbd>→</kbd> Одобрить<br>
+                            <kbd>Пробел</kbd> Пропустить<br>
+                            <kbd>Backspace</kbd> Отменить
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            updateStats();
+        }
+        
+        function approveImage() {
+            history.push({ index: currentIndex, action: 'approved' });
+            approved.push(images[currentIndex]);
+            currentIndex++;
+            showImage();
+        }
+        
+        function rejectImage() {
+            history.push({ index: currentIndex, action: 'rejected' });
+            rejected.push(images[currentIndex]);
+            currentIndex++;
+            showImage();
+        }
+        
+        function skipImage() {
+            history.push({ index: currentIndex, action: 'skipped' });
+            currentIndex++;
+            showImage();
+        }
+        
+        function undoLast() {
+            if (history.length === 0) return;
+            
+            const last = history.pop();
+            
+            if (last.action === 'approved') {
+                approved.pop();
+            } else if (last.action === 'rejected') {
+                rejected.pop();
+            }
+            
+            currentIndex = last.index;
+            showImage();
+        }
+        
+        function updateStats() {
+            document.getElementById('reviewed').textContent = currentIndex;
+            document.getElementById('approved').textContent = approved.length;
+            document.getElementById('rejected').textContent = rejected.length;
+            
+            const progress = (currentIndex / images.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+        
+        function showCompleted() {
+            const results = {
+                approved: approved.map(img => img.path),
+                rejected: rejected.map(img => img.path),
+                timestamp: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            
+            document.getElementById('content').innerHTML = `
+                <div class="completed">
+                    <h2>✓ Кураторство завершено!</h2>
+                    <p>Вы одобрили <strong>${approved.length}</strong> изображений из ${images.length}.</p>
+                    <button class="btn-download" onclick="window.location.href='${url}'; this.download='atlas_results_${Date.now()}.json';">
+                        Скачать результаты
+                    </button>
+                    <p style="margin-top: 30px; font-size: 14px; color: #999;">
+                        Следующий шаг: AI создаст черновики аннотаций для одобренных изображений.
+                    </p>
+                </div>
+            `;
+        }
+        
+        document.addEventListener('keydown', (e) => {
+            if (currentIndex >= images.length) return;
+            
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                rejectImage();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                approveImage();
+            } else if (e.key === ' ') {
+                e.preventDefault();
+                skipImage();
+            } else if (e.key === 'Backspace') {
+                e.preventDefault();
+                undoLast();
+            }
+        });
+        
+        loadImages();
+    </script>
+</body>
+</html>
+
